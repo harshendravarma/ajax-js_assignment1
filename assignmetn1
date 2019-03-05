@@ -5,8 +5,7 @@
 
     </head>
     <body>
-        <input type="date" id="date_input">
-        <input type="text" id="text_input",value="add">
+      
         <button id="buttn" >add</button>
         <div id="maindiv">
         </div>
@@ -14,55 +13,65 @@
     </body>
 </html>
 <script>
-let url = 'https://jsonplaceholder.typicode.com/posts';
-var arr1;
-fetch(url)
-.then(res => res.json())
-.then((out) => {
- // console.log('Checkout this JSON! ', out);
-  arr1=out;
-})
-.catch(err => { throw err });
-//console.log(a);
-
-console.log('Checkout this JSON! ', arr1);
+      var keys;
+        var values;
      var buttn=document.getElementById("buttn");
     buttn.addEventListener('click',addbuttn);
     array=[];
     function addbuttn()
     { 
-        var date_value=document.getElementById("date_input").value;
-        var text_value=document.getElementById("text_input").value;
-        array.push({"date":date_value,"text":text_value});
-        load_table();
+        fetch_data()
+       // load_table();
+       // console.log(array);
     }
+    function fetch_data(){
+
+var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            array = this.responseText;
+           //console.log(array);
+            //document.getElementById("demo").innerHTML =arr;
+            total();
+        }
+    };
+    xhttp.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+    xhttp.send();
+    
+}
+   function total(){
+       console.log(array);
+    array = JSON.parse(array);
+            keys = Object.keys(array[1])
+            load_table();
     function delete_element(input1){
-        console.log(input1);
+        //console.log(input1);
         array.splice(input1,1);
-        console.log(array);
+       // console.log(array);
         load_table();
     }
     function load_table()
     {
         //sort();
-        var data_array=array.map((element,index)=>{return Object.values(array[index])})
+        //var data_array=array.map((element,index)=>{return Object.values(array[index])})
+        var data_array=array.map((element, index) => {
+                return Object.values(element)
+            })
         var table_var=document.getElementsByTagName('TABLE');
         if(table_var[0]) table_var[0].remove();
         var main_table=document.createElement('TABLE');
         main_table.border=2;
-        //tablehead
+        //tablehead starts here
         var table_row1=document.createElement('tr');
-        var table_head_1=document.createElement('th'); 
-        var head_data1=document.createTextNode("DATE");
-        var table_head_2=document.createElement('th'); 
-        var head_data2=document.createTextNode("DESCRIPTION");
+        for(let row=0;row<keys.length;row++){
+            var table_head_1=document.createElement('th'); 
+        var head_data1=document.createTextNode(keys[row]);
         table_head_1.appendChild(head_data1); 
-        table_head_2.appendChild(head_data2);
-        table_head_1.addEventListener("click",sort);
-        table_head_2.addEventListener("click",sort_d); 
+        table_head_1.addEventListener("click",()=>{sort()});
         table_row1.appendChild(table_head_1);
-        table_row1.appendChild(table_head_2);
+        }
         main_table.appendChild(table_row1);
+        //table head ends here
         //table body
         
         for(let j=0;j<array.length;j++)
@@ -70,7 +79,7 @@ console.log('Checkout this JSON! ', arr1);
             //console.log(j);
             
             var table_row1=document.createElement('tr');
-            for(let i=0;i<2;i++)
+            for(let i=0;i<keys.length;i++)
             {
                 var table_head=document.createElement('td');  
                 var head_data=document.createTextNode(data_array[j][i]);
@@ -91,27 +100,22 @@ console.log('Checkout this JSON! ', arr1);
 
 
     }
+
     function sort()
     {
-        array.sort(function(input_1,input_2){ var dateA=new Date(input_1.date), dateB=new Date(input_2.date) 
-        return dateA-dateB })
-        load_table();
-        //console.log(array);
-
-    }
-    function sort_d()
-    { 
+       // var b=body;
         array.sort(function(input_11,input_22){
-        var nameA=input_11.text.toLowerCase(), nameB=input_22.text.toLowerCase()
+            
+        var nameA=input_11.body.toLowerCase(), nameB=input_22.body.toLowerCase()
         if (nameA < nameB) 
         return -1 
         if (nameA > nameB)
         return 1
         return 0 
     })
+  
     load_table();
-    }
-    
+    }   
+}
 
-
-</script>
+</scrip
