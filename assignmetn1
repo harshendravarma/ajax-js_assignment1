@@ -1,121 +1,145 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    
 
-    </head>
-    <body>
-      
-        <button id="buttn" >add</button>
-        <div id="maindiv">
-        </div>
+<head>
 
-    </body>
+
+</head>
+
+<body>
+
+    <button id="buttn">add</button>
+    <div id="maindiv">
+    </div>
+
+</body>
+
 </html>
 <script>
-      var keys;
-        var values;
-     var buttn=document.getElementById("buttn");
-    buttn.addEventListener('click',addbuttn);
-    array=[];
-    function addbuttn()
-    { 
-        fetch_data()
-       // load_table();
-       // console.log(array);
-    }
-    function fetch_data(){
+    var keys;
+    var values;
+    var buttn = document.getElementById("buttn");
+    buttn.addEventListener('click', addbuttn);
+    array = [];
 
-var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            array = this.responseText;
-           //console.log(array);
-            //document.getElementById("demo").innerHTML =arr;
-            total();
-        }
-    };
-    xhttp.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
-    xhttp.send();
-    
-}
-   function total(){
-       console.log(array);
-    array = JSON.parse(array);
-            keys = Object.keys(array[1])
-            load_table();
-    function delete_element(input1){
-        //console.log(input1);
-        array.splice(input1,1);
-       // console.log(array);
-        load_table();
+    function addbuttn() {
+        fetch_data()
+        // load_table();
+        // console.log(array);
     }
-    function load_table()
-    {
-        //sort();
-        //var data_array=array.map((element,index)=>{return Object.values(array[index])})
-        var data_array=array.map((element, index) => {
+//fetch data from url
+    function fetch_data() {
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                array = this.responseText;
+                //console.log(array);
+                //document.getElementById("demo").innerHTML =arr;
+                total();
+            }
+        };
+        xhttp.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+        xhttp.send();
+
+    }
+// load table after fetching
+    function total() {
+        // console.log(array);
+        array = JSON.parse(array);
+        keys = Object.keys(array[1])
+        load_table();
+//function to delete table
+        function delete_element(input1) {
+            //console.log(input1);
+            array.splice(input1, 1);
+            // console.log(array);
+            load_table();
+        }
+//function to load table
+        function load_table() {
+            //sort();
+            //var data_array=array.map((element,index)=>{return Object.values(array[index])})
+            var data_array = array.map((element, index) => {
                 return Object.values(element)
             })
-        var table_var=document.getElementsByTagName('TABLE');
-        if(table_var[0]) table_var[0].remove();
-        var main_table=document.createElement('TABLE');
-        main_table.border=2;
-        //tablehead starts here
-        var table_row1=document.createElement('tr');
-        for(let row=0;row<keys.length;row++){
-            var table_head_1=document.createElement('th'); 
-        var head_data1=document.createTextNode(keys[row]);
-        table_head_1.appendChild(head_data1); 
-        table_head_1.addEventListener("click",()=>{sort()});
-        table_row1.appendChild(table_head_1);
-        }
-        main_table.appendChild(table_row1);
-        //table head ends here
-        //table body
-        
-        for(let j=0;j<array.length;j++)
-        {
-            //console.log(j);
-            
-            var table_row1=document.createElement('tr');
-            for(let i=0;i<keys.length;i++)
-            {
-                var table_head=document.createElement('td');  
-                var head_data=document.createTextNode(data_array[j][i]);
-                table_head.appendChild(head_data);
-                table_row1.appendChild(table_head);
+            var table_var = document.getElementsByTagName('TABLE');
+            if (table_var[0]) table_var[0].remove();
+            var main_table = document.createElement('TABLE');
+            main_table.border = 2;
+            //tablehead starts here
+            var table_row1 = document.createElement('tr');
+            for (let row = 0; row < keys.length; row++) {
+                var table_head_1 = document.createElement('th');
+                var head_data1 = document.createTextNode(keys[row]);
+                table_head_1.appendChild(head_data1);
+                table_head_1.addEventListener("click", () => {
+                    sort(row)
+                });
+                table_row1.appendChild(table_head_1);
             }
-            var table_head2=document.createElement('td');  
-            var head_data2=document.createTextNode("x");
-            //table_head2.id="no"+j;
-            
-            table_head2.addEventListener("click", function(){ delete_element(j);});
-            table_head2.appendChild(head_data2);
-            table_row1.appendChild(table_head2);
             main_table.appendChild(table_row1);
-            
+            //table head ends here
+            //table body
+
+            for (let j = 0; j < array.length; j++) {
+                //console.log(j);
+
+                var table_row1 = document.createElement('tr');
+                for (let i = 0; i < keys.length; i++) {
+                    var table_head = document.createElement('td');
+                    var head_data = document.createTextNode(data_array[j][i]);
+                    table_head.appendChild(head_data);
+                    table_row1.appendChild(table_head);
+                }
+                var table_head2 = document.createElement('td');
+                var head_data2 = document.createTextNode("x");
+                //table_head2.id="no"+j;
+
+                table_head2.addEventListener("click", function () {
+                    delete_element(j);
+                });
+                table_head2.appendChild(head_data2);
+                table_row1.appendChild(table_head2);
+                main_table.appendChild(table_row1);
+
+            }
+            maindiv.appendChild(main_table);
+
+
         }
-        maindiv.appendChild(main_table);
-
-
-    }
-
-    function sort()
-    {
-       // var b=body;
-        array.sort(function(input_11,input_22){
+//function to sort  the table
+        function sort(input) {
+            if(input==3){
+            array.sort(function (input_11, input_22) {
+                
+                var nameA = input_11.body.toLowerCase(),
+                    nameB = input_22.body.toLowerCase()
+                if (nameA < nameB)
+                    return -1
+                if (nameA > nameB)
+                    return 1
+                return 0
+            })}
+            else if(input==2){
+            array.sort(function (input_11, input_22) {
+                
+                var nameA = input_11.title.toLowerCase(),
+                    nameB = input_22.title.toLowerCase()
+                if (nameA < nameB)
+                    return -1
+                if (nameA > nameB)
+                    return 1
+                return 0
+            })}
+            else{
+                array.sort(function(a, b){
+    return a.id-b.id
+})
+            }
             
-        var nameA=input_11.body.toLowerCase(), nameB=input_22.body.toLowerCase()
-        if (nameA < nameB) 
-        return -1 
-        if (nameA > nameB)
-        return 1
-        return 0 
-    })
-  
-    load_table();
-    }   
-}
 
-</scrip
+            load_table();
+        }
+    }
+</script>
